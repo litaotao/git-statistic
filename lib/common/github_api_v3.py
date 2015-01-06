@@ -230,7 +230,7 @@ class GitHub(object):
         return _Callable(self, '/%s' % attr)
 
     def _http(self, _method, _path, **kw):
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         data = None
         params = None
         if _method=='GET' and kw:

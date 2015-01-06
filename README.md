@@ -10,7 +10,7 @@ Maybe in the not long future, I'll add some other data source, such as social ne
 
 Version 1.0.0 [dev]
 -----
-support functions belµlow:
+support functions bellow:
 
 - Get all the repos writen in a user-defined language;
 - Get all the commits number each month of a user-defined language;
