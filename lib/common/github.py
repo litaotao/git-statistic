@@ -7,7 +7,7 @@
     A simple implementation of github API v3.
 
     :Author: taotao.li
-    :last updated: Dec.31st.2014
+    :last updated: Jan.25th.2014
 """
 
 import requests
@@ -35,6 +35,7 @@ def get_repos(language):
 
 	return
 
+
 def get_commit(owner, repos):
 	suffix = '/repos/{}/{}/stats/commit_activit'
 	url = (prefix + suffix).format(owner, repos)
@@ -43,6 +44,8 @@ def get_commit(owner, repos):
 	# do some date store operation here
 
 	return 
+
+
 
 
 
