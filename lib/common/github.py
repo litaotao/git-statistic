@@ -18,7 +18,7 @@ prefix = 'https://api.github.com'
 
 
 def get_repos(language):
-	suffix = '/search/repositories?q={}&page={}'
+	suffix = '/search/repositories?q=language:{}&page={}'
 	url = (prefix + suffix).format(language, str(1))
 	raw = requests.get(url)
 
@@ -29,7 +29,7 @@ def get_repos(language):
 		url = links['next']['url']
 		next = requests.get(url)
 
-		# do some data store operation
+		# do some data clean 
 
 		links = next.links
 

@@ -16,7 +16,7 @@ support functions bellow:
 
 - Get all the repos writen in a user-defined language; [done]
 - Get all the commits number each month of a user-defined language; [done]
-- Get all the contributors number of each repo writen in a user-defined language;  
+- Get all the contributors number of each repo writen in a user-defined language[done];  
 - Get the new repos each year; [done] 
 - Get all the repos' data of fork, watch, star; [done]
 - Get the push number of each repos in a peroid;
