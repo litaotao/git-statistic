@@ -12,28 +12,74 @@
 
 import requests
 
-
-
 prefix = 'https://api.github.com'
 
 
+
+def extract_repos(repos):
+	"""
+	Extract meta data of each repo : 
+		full_name
+		id:
+		private:
+		fork:
+		stargazers_count:
+		watchers_count:
+		forks_count:
+		open_issues_count:
+		watchers:
+	"""
+	res = {}
+	tmp = {}
+	for i in repos:
+		name = i.get('full_name', 'None')
+		tmp['id'] = i.get('id', 0)
+		tmp['private'] = i.get('private', 0)
+		tmp['fork'] = i.get('fork', 0)
+		tmp['stargazers_count'] = i.get('stargazers_count', 0)
+		tmp['forks_count'] = i.get('forks_count', 0)
+		tmp['open_issues_count'] = i.get('open_issues_count', 0)
+		tmp['watchers'] = i.get('watchers', 0)
+		res[name] = tmp
+
+	return res
+
+
 def get_repos(language):
-	suffix = '/search/repositories?q=language:{}&page={}'
-	url = (prefix + suffix).format(language, str(1))
+	"""
+	Get some meta data of a repos.
+	For Github can only return up to 1000 when use a normal search, we had
+		to use some tricks to get all the repos' data we need.
+	Here we use the forks number to seperate each request url, to get all the
+		repos' data. Of course, in this way, we need first get the max forks 
+		number of repos written in our defined language. 
+	"""
+	## step 1. get the max forks number 
+	suffix = '/search/repositories?q=language:{}&sort=forks&order=desc'
+	url = (prefix + suffix).format(language)
+	raw = requests.get(url)
+	total_count = raw.get('total_count', 0)
+	max_forks = raw.get('items', [{}])[0].get('forks_count', 0)
+
+	## step 2.
+
+	suffix = '/search/repositories?q=language:{}+forks={}&page={}'
+	url = (prefix + suffix).format(language, '0', str(1))
 	raw = requests.get(url)
 
 	# do some data store operation
 
 	links = raw.links
+	if 'next' not in links:
+		res = extract_repos(raw['items'])
+		yield res
+
 	while 'next' in links:
-		url = links['next']['url']
-		next = requests.get(url)
-
-		# do some data clean 
-
+		raw = requests.get(url)
 		links = next.links
-
-	return
+		res = extract_repos(raw['items'])
+		url = links['next']['url']
+		yield res
 
 
 def get_commit(owner, repos):
