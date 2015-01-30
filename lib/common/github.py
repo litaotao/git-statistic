@@ -35,11 +35,13 @@ def extract_repos(repos):
 		name = i.get('full_name', 'None')
 		tmp['id'] = i.get('id', 0)
 		tmp['private'] = i.get('private', 0)
-		tmp['fork'] = i.get('fork', 0)
+		tmp['isfork'] = i.get('fork', 0)
 		tmp['stargazers_count'] = i.get('stargazers_count', 0)
-		tmp['forks_count'] = i.get('forks_count', 0)
-		tmp['open_issues_count'] = i.get('open_issues_count', 0)
+		tmp['forks'] = i.get('forks_count', 0)
+		tmp['issues'] = i.get('open_issues_count', 0)
 		tmp['watchers'] = i.get('watchers', 0)
+		tmp['stars'] = i.get('stargazers_count', 0)
+		tmp['create'] = i.gt('created_at', '')
 		res[name] = tmp
 
 	return res
