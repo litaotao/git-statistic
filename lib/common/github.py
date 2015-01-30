@@ -82,14 +82,35 @@ def get_repos(language):
 		yield res
 
 
+def extract_commit(commit, owner=True):
+	"""
+	return list
+	"""
+	if owner:
+		res = [i.get('total', 0) for i in commit]
+	else:
+		res = commit
+	return res
+
+
 def get_commit(owner, repos):
 	suffix = '/repos/{}/{}/stats/commit_activit'
 	url = (prefix + suffix).format(owner, repos)
 	raw = requests.get(url)
 
 	# do some date store operation here
+	weekly_commit = extract_commit(raw)
 
-	return 
+	suffix = '/repos/{}/{}/stats/participation'
+	url = (prefix + suffix).format(owner, repos)
+	raw = requests.get(url)
+
+	# do some date store operation here
+	user_commit = extract_commit(raw, owner=False)
+
+	return weekly_commit, user_commit
+
+
 
 
 
