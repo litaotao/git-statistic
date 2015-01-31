@@ -7,7 +7,7 @@
     A simple implementation of github API v3.
 
     :Author: taotao.li
-    :last updated: Jan.25th.2014
+    :last updated: Jan.31st.2014
 """
 
 import requests
@@ -63,25 +63,28 @@ def get_repos(language):
 	total_count = raw.get('total_count', 0)
 	max_forks = raw.get('items', [{}])[0].get('forks_count', 0)
 
-	## step 2.
+	## step 2. get all the repos written in a defined language
 
-	suffix = '/search/repositories?q=language:{}+forks={}&page={}'
-	url = (prefix + suffix).format(language, '0', str(1))
-	raw = requests.get(url)
+	suffix = '/search/repositories?q=language:{}+forks={}&page={}&per_page=100'
 
-	# do some data store operation
+	for i in range(max_forks+1):
 
-	links = raw.links
-	if 'next' not in links:
-		res = extract_repos(raw['items'])
-		yield res
-
-	while 'next' in links:
+		url = (prefix + suffix).format(language, i, str(1))
 		raw = requests.get(url)
-		links = next.links
-		res = extract_repos(raw['items'])
-		url = links['next']['url']
-		yield res
+
+		# do some data store operation
+
+		links = raw.links
+		if 'next' not in links:
+			res = extract_repos(raw['items'])
+			yield res
+
+		while 'next' in links:
+			raw = requests.get(url)
+			links = next.links
+			res = extract_repos(raw['items'])
+			url = links['next']['url']
+			yield res
 
 
 def extract_commit(commit, owner=True):

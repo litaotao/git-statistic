@@ -46,6 +46,8 @@ class FetchData(object):
 		return self.language_data
 
 	def _get_data():
-		pass
+		for repos in gh.get_repos(self.language):
+			self.data_file.append(repos)
+		
 
 
